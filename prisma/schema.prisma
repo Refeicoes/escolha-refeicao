@@ -1,0 +1,78 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum MealType {
+  TERCA
+  QUINTA
+}
+
+enum MealEventStatus {
+  OPEN
+  CLOSED
+}
+
+enum SelectionOption {
+  MASSA
+  STREET_FOOD
+  TRADICIONAL
+}
+
+model Company {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  employees          Employee[]
+  responsesSnapshot  Response[] @relation("ResponseCompanySnapshot")
+}
+
+model Employee {
+  id                 Int      @id @default(autoincrement())
+  registrationNumber String   @unique
+  fullName           String
+  companyId          Int
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  company   Company    @relation(fields: [companyId], references: [id])
+  responses Response[]
+}
+
+model MealEvent {
+  id        Int             @id @default(autoincrement())
+  mealDate  DateTime        @unique @db.Date
+  mealType  MealType
+  deadline  DateTime
+  status    MealEventStatus @default(OPEN)
+  createdAt DateTime        @default(now())
+  updatedAt DateTime        @updatedAt
+
+  responses Response[]
+}
+
+model Response {
+  id                   Int              @id @default(autoincrement())
+  employeeId           Int
+  mealEventId          Int
+  selection            SelectionOption
+  companyIdAtResponse  Int
+  fullNameAtResponse   String
+  respondedAt          DateTime         @default(now())
+
+  employee  Employee  @relation(fields: [employeeId], references: [id])
+  mealEvent MealEvent @relation(fields: [mealEventId], references: [id])
+  company   Company   @relation("ResponseCompanySnapshot", fields: [companyIdAtResponse], references: [id])
+
+  @@unique([employeeId, mealEventId])
+}
