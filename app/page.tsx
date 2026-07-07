@@ -1,5 +1,4 @@
 import { getNextUpcomingMealEvent } from "@/lib/mealEvent";
-import { prisma } from "@/lib/prisma";
 import { EmployeeFlow } from "./(employee)/EmployeeFlow";
 
 export const dynamic = "force-dynamic";
@@ -16,11 +15,6 @@ export default async function HomePage() {
     );
   }
 
-  const companies = await prisma.company.findMany({
-    where: { active: true },
-    orderBy: { name: "asc" },
-  });
-
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center p-6">
       <EmployeeFlow
@@ -29,7 +23,6 @@ export default async function HomePage() {
           mealType: event.mealType,
           deadline: event.deadline.toISOString(),
         }}
-        companies={companies.map((c) => ({ id: c.id, name: c.name }))}
       />
     </main>
   );

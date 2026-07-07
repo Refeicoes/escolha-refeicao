@@ -3,7 +3,7 @@ import { z } from "zod";
 export const employeeIdentificationSchema = z.object({
   registrationNumber: z.string().trim().min(1, "Matrícula é obrigatória"),
   fullName: z.string().trim().min(1, "Nome completo é obrigatório"),
-  companyId: z.coerce.number().int().positive("Selecione uma empresa"),
+  companyName: z.string().trim().min(1, "Empresa é obrigatória"),
 });
 
 export const responseSubmissionSchema = employeeIdentificationSchema.extend({

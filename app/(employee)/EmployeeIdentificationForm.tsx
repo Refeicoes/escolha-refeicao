@@ -2,28 +2,20 @@
 
 import { useActionState } from "react";
 import { identifyEmployeeAction, type IdentifyResult } from "./actions";
-import { CompanySelect } from "./CompanySelect";
-
-interface Company {
-  id: number;
-  name: string;
-}
 
 interface Identification {
   registrationNumber: string;
   fullName: string;
-  companyId: number;
+  companyName: string;
 }
 
 const initialState: IdentifyResult = { ok: false };
 
 export function EmployeeIdentificationForm({
   mealEventId,
-  companies,
   onIdentified,
 }: {
   mealEventId: number;
-  companies: Company[];
   onIdentified: (data: Identification) => void;
 }) {
   const [state, formAction, isPending] = useActionState(
@@ -33,7 +25,7 @@ export function EmployeeIdentificationForm({
         onIdentified({
           registrationNumber: String(formData.get("registrationNumber") ?? "").trim(),
           fullName: String(formData.get("fullName") ?? "").trim(),
-          companyId: Number(formData.get("companyId")),
+          companyName: String(formData.get("companyName") ?? "").trim(),
         });
       }
       return result;
@@ -70,10 +62,16 @@ export function EmployeeIdentificationForm({
       </div>
 
       <div>
-        <label htmlFor="companyId" className="block text-sm font-medium">
+        <label htmlFor="companyName" className="block text-sm font-medium">
           Empresa
         </label>
-        <CompanySelect companies={companies} />
+        <input
+          id="companyName"
+          name="companyName"
+          required
+          placeholder="Digite o nome da sua empresa"
+          className="mt-1 w-full rounded border px-3 py-2"
+        />
       </div>
 
       {state.error && <p className="text-sm text-red-600">{state.error}</p>}

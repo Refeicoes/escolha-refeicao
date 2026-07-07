@@ -18,7 +18,7 @@ export async function identifyEmployeeAction(
   const parsed = employeeIdentificationSchema.safeParse({
     registrationNumber: formData.get("registrationNumber"),
     fullName: formData.get("fullName"),
-    companyId: formData.get("companyId"),
+    companyName: formData.get("companyName"),
   });
 
   if (!parsed.success) {
@@ -62,7 +62,7 @@ export async function submitResponseAction(
   const parsed = responseSubmissionSchema.safeParse({
     registrationNumber: formData.get("registrationNumber"),
     fullName: formData.get("fullName"),
-    companyId: formData.get("companyId"),
+    companyName: formData.get("companyName"),
     mealEventId: formData.get("mealEventId"),
     selection: formData.get("selection"),
   });
@@ -71,7 +71,7 @@ export async function submitResponseAction(
     return { ok: false, error: parsed.error.issues[0]?.message ?? "Dados inválidos." };
   }
 
-  const { registrationNumber, fullName, companyId, mealEventId, selection } = parsed.data;
+  const { registrationNumber, fullName, companyName, mealEventId, selection } = parsed.data;
 
   const event = await prisma.mealEvent.findUnique({ where: { id: mealEventId } });
   if (!event || !isMealEventOpen(event)) {
@@ -88,6 +88,13 @@ export async function submitResponseAction(
 
   try {
     await prisma.$transaction(async (tx) => {
+      const existingCompany = await tx.company.findFirst({
+        where: { name: { equals: companyName, mode: "insensitive" } },
+      });
+      const company =
+        existingCompany ?? (await tx.company.create({ data: { name: companyName } }));
+      const companyId = company.id;
+
       const employee = await tx.employee.upsert({
         where: { registrationNumber },
         update: { fullName, companyId },

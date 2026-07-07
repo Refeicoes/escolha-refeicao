@@ -6,7 +6,7 @@ import { submitResponseAction, type SubmitResult } from "./actions";
 interface Identification {
   registrationNumber: string;
   fullName: string;
-  companyId: number;
+  companyName: string;
 }
 
 interface MealEventInfo {
@@ -51,7 +51,7 @@ export function MealSelectionForm({
     <form action={formAction} className="space-y-4">
       <input type="hidden" name="registrationNumber" value={identification.registrationNumber} />
       <input type="hidden" name="fullName" value={identification.fullName} />
-      <input type="hidden" name="companyId" value={identification.companyId} />
+      <input type="hidden" name="companyName" value={identification.companyName} />
       <input type="hidden" name="mealEventId" value={mealEvent.id} />
 
       <p className="font-medium">{question}</p>
