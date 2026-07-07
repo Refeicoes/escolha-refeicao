@@ -2,6 +2,8 @@ import { getNextUpcomingMealEvent } from "@/lib/mealEvent";
 import { prisma } from "@/lib/prisma";
 import { EmployeeFlow } from "./(employee)/EmployeeFlow";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage() {
   const event = await getNextUpcomingMealEvent();
 
