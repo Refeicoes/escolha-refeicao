@@ -30,20 +30,35 @@ export async function identifyEmployeeAction(
     return { ok: false, error: "O prazo para esta refeição foi encerrado." };
   }
 
-  const employee = await prisma.employee.findUnique({
-    where: { registrationNumber: parsed.data.registrationNumber },
+  // Matrícula is only unique within a company (each company numbers its own
+  // employees independently), so the duplicate check must be scoped by
+  // company too — otherwise two different people at two different companies
+  // who happen to share a number would collide.
+  const company = await prisma.company.findFirst({
+    where: { name: { equals: parsed.data.companyName, mode: "insensitive" } },
   });
 
-  if (employee) {
-    const existingResponse = await prisma.response.findUnique({
-      where: { employeeId_mealEventId: { employeeId: employee.id, mealEventId } },
+  if (company) {
+    const employee = await prisma.employee.findUnique({
+      where: {
+        registrationNumber_companyId: {
+          registrationNumber: parsed.data.registrationNumber,
+          companyId: company.id,
+        },
+      },
     });
-    if (existingResponse) {
-      return {
-        ok: false,
-        alreadyResponded: true,
-        error: "Você já registrou sua escolha para esta refeição.",
-      };
+
+    if (employee) {
+      const existingResponse = await prisma.response.findUnique({
+        where: { employeeId_mealEventId: { employeeId: employee.id, mealEventId } },
+      });
+      if (existingResponse) {
+        return {
+          ok: false,
+          alreadyResponded: true,
+          error: "Você já registrou sua escolha para esta refeição.",
+        };
+      }
     }
   }
 
@@ -96,8 +111,8 @@ export async function submitResponseAction(
       const companyId = company.id;
 
       const employee = await tx.employee.upsert({
-        where: { registrationNumber },
-        update: { fullName, companyId },
+        where: { registrationNumber_companyId: { registrationNumber, companyId } },
+        update: { fullName },
         create: { registrationNumber, fullName, companyId },
       });
 

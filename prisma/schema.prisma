@@ -39,7 +39,7 @@ model Company {
 
 model Employee {
   id                 Int      @id @default(autoincrement())
-  registrationNumber String   @unique
+  registrationNumber String
   fullName           String
   companyId          Int
   createdAt          DateTime @default(now())
@@ -47,6 +47,11 @@ model Employee {
 
   company   Company    @relation(fields: [companyId], references: [id])
   responses Response[]
+
+  // Matrícula is only unique within a company: different companies each run
+  // their own independent numbering, so the same number legitimately belongs
+  // to two different people if they work for different employers.
+  @@unique([registrationNumber, companyId])
 }
 
 model MealEvent {
