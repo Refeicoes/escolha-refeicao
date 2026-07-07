@@ -5,7 +5,7 @@ export function GrsaWatermark() {
       className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center overflow-hidden select-none"
     >
       <div
-        className="flex flex-col items-center opacity-[0.028] dark:opacity-[0.045]"
+        className="flex flex-col items-center opacity-[0.028]"
         style={{ width: "clamp(220px, 62vw, 620px)" }}
       >
         <svg
