@@ -17,7 +17,7 @@ export default async function EditMealEventPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold">Editar Evento de Refeição</h1>
+      <h1 className="text-xl font-semibold text-brand-700">Editar Evento de Refeição</h1>
       <MealEventForm
         action={boundAction}
         defaultValues={{

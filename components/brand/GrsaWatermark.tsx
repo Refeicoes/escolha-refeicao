@@ -5,12 +5,12 @@ export function GrsaWatermark() {
       className="pointer-events-none fixed inset-0 z-0 flex items-center justify-center overflow-hidden select-none"
     >
       <div
-        className="flex flex-col items-center opacity-[0.028]"
+        className="flex flex-col items-center opacity-[0.05]"
         style={{ width: "clamp(220px, 62vw, 620px)" }}
       >
         <svg
           viewBox="0 0 320 150"
-          className="w-full text-neutral-900"
+          className="w-full text-brand-900"
           fill="none"
           stroke="currentColor"
         >
@@ -34,7 +34,7 @@ export function GrsaWatermark() {
           </text>
         </svg>
         <p
-          className="mt-1 text-center text-neutral-900 uppercase"
+          className="mt-1 text-center text-brand-900 uppercase"
           style={{
             fontSize: "clamp(9px, 1.6vw, 15px)",
             letterSpacing: "0.18em",

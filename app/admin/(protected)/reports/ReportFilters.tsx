@@ -8,6 +8,9 @@ interface MealEventOption {
   label: string;
 }
 
+const selectClass =
+  "mt-1 rounded-lg border border-card-border bg-white px-3 py-2 text-ink focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-200";
+
 export function ReportFilters({
   companies,
   mealEvents,
@@ -22,14 +25,14 @@ export function ReportFilters({
   return (
     <form className="flex flex-wrap items-end gap-4">
       <div>
-        <label htmlFor="companyId" className="block text-sm font-medium">
+        <label htmlFor="companyId" className="block text-sm font-medium text-brand-700">
           Empresa
         </label>
         <select
           id="companyId"
           name="companyId"
           defaultValue={selectedCompanyId ?? ""}
-          className="mt-1 rounded border px-3 py-2"
+          className={selectClass}
         >
           <option value="">Todas</option>
           {companies.map((c) => (
@@ -40,14 +43,14 @@ export function ReportFilters({
         </select>
       </div>
       <div>
-        <label htmlFor="mealEventId" className="block text-sm font-medium">
+        <label htmlFor="mealEventId" className="block text-sm font-medium text-brand-700">
           Evento
         </label>
         <select
           id="mealEventId"
           name="mealEventId"
           defaultValue={selectedMealEventId ?? ""}
-          className="mt-1 rounded border px-3 py-2"
+          className={selectClass}
         >
           <option value="">Todos</option>
           {mealEvents.map((e) => (
@@ -57,10 +60,13 @@ export function ReportFilters({
           ))}
         </select>
       </div>
-      <button type="submit" className="rounded bg-gray-800 px-4 py-2 text-sm text-white">
+      <button
+        type="submit"
+        className="rounded-lg bg-brand-700 px-4 py-2 text-sm font-medium text-white shadow-sm transition-colors hover:bg-brand-800"
+      >
         Filtrar
       </button>
-      <a href="/admin/reports" className="text-sm text-gray-600">
+      <a href="/admin/reports" className="text-sm text-ink-muted hover:text-brand-600">
         Limpar
       </a>
     </form>

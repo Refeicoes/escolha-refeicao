@@ -17,6 +17,9 @@ interface MealEventInfo {
 
 const initialState: SubmitResult = { ok: false };
 
+const optionClass =
+  "flex cursor-pointer items-center gap-3 rounded-lg border border-card-border bg-white px-4 py-3 text-ink transition-colors has-[:checked]:border-brand-500 has-[:checked]:bg-brand-50 has-[:disabled]:cursor-not-allowed has-[:disabled]:opacity-50";
+
 export function MealSelectionForm({
   mealEvent,
   identification,
@@ -37,7 +40,14 @@ export function MealSelectionForm({
   }, [mealEvent.deadline]);
 
   if (state.ok) {
-    return <p className="font-medium text-green-700">Sua escolha foi registrada com sucesso.</p>;
+    return (
+      <div className="flex flex-col items-center gap-2 py-4 text-center">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 text-2xl text-brand-600">
+          ✓
+        </div>
+        <p className="font-medium text-brand-700">Sua escolha foi registrada com sucesso.</p>
+      </div>
+    );
   }
 
   const isTerca = mealEvent.mealType === "TERCA";
@@ -54,16 +64,32 @@ export function MealSelectionForm({
       <input type="hidden" name="companyName" value={identification.companyName} />
       <input type="hidden" name="mealEventId" value={mealEvent.id} />
 
-      <p className="font-medium">{question}</p>
+      <p className="font-medium text-brand-700">{question}</p>
 
-      <label className="flex items-center gap-2">
-        <input type="radio" name="selection" value={specialValue} required disabled={expired} />
-        {specialLabel}
-      </label>
-      <label className="flex items-center gap-2">
-        <input type="radio" name="selection" value="TRADICIONAL" required disabled={expired} />
-        Não, vou utilizar a rampa de comida tradicional.
-      </label>
+      <div className="space-y-2">
+        <label className={optionClass}>
+          <input
+            type="radio"
+            name="selection"
+            value={specialValue}
+            required
+            disabled={expired}
+            className="accent-brand-500"
+          />
+          {specialLabel}
+        </label>
+        <label className={optionClass}>
+          <input
+            type="radio"
+            name="selection"
+            value="TRADICIONAL"
+            required
+            disabled={expired}
+            className="accent-brand-500"
+          />
+          Não, vou utilizar a rampa de comida tradicional.
+        </label>
+      </div>
 
       {expired && (
         <p className="text-sm text-red-600">O prazo para esta refeição foi encerrado.</p>
@@ -73,7 +99,7 @@ export function MealSelectionForm({
       <button
         type="submit"
         disabled={isPending || expired}
-        className="w-full rounded bg-blue-600 px-4 py-2 text-white disabled:opacity-50"
+        className="w-full rounded-lg bg-brand-500 px-4 py-2 font-medium text-white shadow-sm transition-colors hover:bg-brand-600 disabled:opacity-50"
       >
         {isPending ? "Enviando..." : "Confirmar Escolha"}
       </button>

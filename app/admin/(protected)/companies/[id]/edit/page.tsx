@@ -16,7 +16,7 @@ export default async function EditCompanyPage({
 
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold">Editar Empresa</h1>
+      <h1 className="text-xl font-semibold text-brand-700">Editar Empresa</h1>
       <CompanyForm action={boundAction} defaultName={company.name} submitLabel="Salvar" />
     </div>
   );

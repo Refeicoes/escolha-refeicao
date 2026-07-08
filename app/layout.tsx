@@ -32,7 +32,7 @@ export default function RootLayout({
         <GrsaWatermark />
         <div className="relative z-10 flex min-h-full flex-1 flex-col">
           {children}
-          <footer className="py-4 text-center text-[11px] text-neutral-400">
+          <footer className="py-4 text-center text-[11px] text-ink-muted/70">
             Desenvolvido por Josilene Garcês
           </footer>
         </div>
